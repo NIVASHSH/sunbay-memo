@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sunbay.io Investment Memo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 24px 32px;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .header h1 { font-size: 1.8em; margin-bottom: 2px; }
+        .header p { font-size: 0.9em; opacity: 0.9; }
+        
+        .content { padding: 32px; }
+        
+        .recommendation {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 28px;
+        }
+        
+        .recommendation h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .recommendation p { font-size: 0.95em; line-height: 1.65; }
+        
+        .badge {
+            background: rgba(255,255,255,0.25);
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.55em;
+            font-weight: bold;
+        }
+        
+        .section { margin-bottom: 28px; }
+        
+        .section h3 {
+            font-size: 1.3em;
+            margin-bottom: 14px;
+            color: #2a5298;
+            border-bottom: 2.5px solid #667eea;
+            padding-bottom: 5px;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+        
+        .argument-box {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 7px;
+        }
+        
+        .argument-box.thesis { border-left: 4px solid #10b981; }
+        .argument-box.risks { border-left: 4px solid #ef4444; }
+        
+        .argument-box h4 {
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+        
+        .argument-box.thesis h4 { color: #059669; }
+        .argument-box.risks h4 { color: #dc2626; }
+        
+        ul { list-style: none; padding: 0; }
+        
+        li {
+            padding: 8px 0 8px 20px;
+            position: relative;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.9em;
+        }
+        
+        li:last-child { border-bottom: none; }
+        
+        .thesis li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .risks li:before {
+            content: "⚠";
+            position: absolute;
+            left: 0;
+            color: #ef4444;
+        }
+        
+        .upside-box, .downside-box {
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 0.85em;
+        }
+        
+        .upside-box {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .downside-box {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        
+        .upside-box h5, .downside-box h5 {
+            font-size: 0.95em;
+            margin-bottom: 6px;
+        }
+        
+        .analysis-list li {
+            padding: 8px 0 8px 22px;
+            font-size: 0.9em;
+        }
+        
+        .analysis-list li:before {
+            content: "→";
+            color: #667eea;
+        }
+        
+        .interactive-section {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 24px;
+            border-radius: 8px;
+            margin: 28px 0;
+            color: white;
+        }
+        
+        .interactive-section h3 {
+            color: white;
+            border-bottom-color: rgba(255,255,255,0.25);
+            margin-bottom: 16px;
+        }
+        
+        .calculator {
+            background: white;
+            padding: 20px;
+            border-radius: 7px;
+            color: #1a1a1a;
+        }
+        
+        .input-group { margin-bottom: 16px; }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.88em;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 5px;
+            border-radius: 5px;
+            background: #e5e7eb;
+            outline: none;
+            margin-top: 4px;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #6366f1;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #6366f1;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .value-display {
+            font-size: 1em;
+            font-weight: 600;
+            color: #6366f1;
+        }
+        
+        .results {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 18px;
+        }
+        
+        .result-card {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .result-card h4 {
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+        
+        .result-card .value {
+            font-size: 1.6em;
+            font-weight: bold;
+        }
+        
+        .scenario-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .scenario-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            background: #6366f1;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85em;
+        }
+        
+        .scenario-btn:hover {
+            background: #4f46e5;
+            transform: translateY(-1px);
+        }
+        
+        .scenario-btn.active { background: #1e3c72; }
+        
+        .notes {
+            margin-top: 16px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 5px;
+            font-size: 0.85em;
+            color: #4b5563;
+            line-height: 1.55;
+        }
+        
+        .final-decision {
+            margin-top: 26px;
+            padding: 20px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 8px;
+            color: white;
+        }
+        
+        .final-decision h3 {
+            color: white;
+            border: none;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .final-decision p {
+            line-height: 1.65;
+            font-size: 0.92em;
+        }
+        
+        .sources {
+            margin-top: 24px;
+            padding: 16px;
+            background: #f9fafb;
+            border-radius: 6px;
+            font-size: 0.8em;
+            color: #6b7280;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 768px) {
+            .two-column { grid-template-columns: 1fr; }
+            .results { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sunbay.io Investment Memo</h1>
+            <p>S16VC | October 2025</p>
+        </div>
+        
+        <div class="content">
+            <div class="recommendation">
+                <h2><span class="badge">PASS</span> Investment Decision</h2>
+                <p><strong>Pass on current terms.</strong> The path to a venture-scale return is unachievable due to a <strong>2x overvaluation</strong> ($6M post vs. $3M benchmark) at this stage. <strong>Traction is bottom-quartile</strong> ($1.5k MRR) with clear <strong>churn signals</strong> (March peak / April drop) and a dependency on non-scalable services revenue. Crucially, the **incomplete team** (no full-time CTO) and slow execution of the core AI differentiator are disqualifying for a high-velocity investment.</p>
+            </div>
+            
+            <div class="section">
+                <h3>Key Arguments & Risks</h3>
+                <div class="two-column">
+                    <div class="argument-box thesis">
+                        <h4>Investment Thesis</h4>
+                        <ul class="thesis">
+                            <li>**Real pain:** Manual AR collections consume 10-20 hrs/week for 50-200 FTE companies.</li>
+                            <li>**Founder Expertise:** 14 years combined in ops/finance provides strong customer insight.</li>
+                            <li>**Revenue Proven:** Total revenue of **$4.5k/month** shows initial willingness to pay.</li>
+                            <li>**Platform Leverage:** A generalist core allows for efficient future expansion into related finance/ops verticals.</li>
+                        </ul>
+                        <div class="upside-box">
+                            <h5>📈 Bull Case / Upside</h5>
+                            <p>Achieve 0.5% market share at $600 MRR = $18M ARR. 10x exit multiple = $180M Exit. Resulting in a **3.0% final ownership** and a **$5.4M return (27x)**. This requires 18% MoM growth for 36 perfect months.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="argument-box risks">
+                        <h4>Critical Risks</h4>
+                        <ul class="risks">
+                            <li>**Valuation Mismatch:** $6M post valuation is 2x over market for $18k ARR ($333x ARR multiple vs. 20-50x typical).</li>
+                            <li>**Incomplete Team:** CTO "joining soon" is disqualifying. Technical execution and product velocity are unproven.</li>
+                            <li>**Churn Signal:** March revenue peak followed by an April drop strongly suggests failed GTM or product retention issues.</li>
+                            <li>**Non-scalable Revenue:** $3k consulting ($\mathbf{67\%}$ of total revenue) indicates deep product gaps preventing self-serve.</li>
+                        </ul>
+                        <div class="downside-box">
+                            <h5>📉 Bear Case / Downside</h5>
+                            <p>Burns $1.2M in 15 months. Stalls at $20k MRR due to high churn. Misses the Series A bar ($2.5M ARR). Total loss of capital (0x MOIC).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h3>1. Team</h3>
+                <ul class="analysis-list">
+                    <li>**Critical Gap:** CTO commitment is disqualifying. "Full Time since [SOON]" means technical execution is unproven, and product velocity will suffer.</li>
+                    <li>**Experience Risk:** Domain knowledge is present (14 years ops/finance), but **scaling experience is absent**. Neither founder has scaled a company from $1M to $10M ARR.</li>
+                    <li>**Missing Roles:** No design, growth, or AI specialist roles. This is a critical deficiency for an "AI voice agent" differentiator.</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h3>2. Product</h3>
+                <ul class="analysis-list">
+                    <li>**Slow Execution:** The core differentiator (AI voice agent) is still "in development" after 6 months. This suggests low product velocity or technical hurdles.</li>
+                    <li>**Value Proposition:** The feature list details *what* it does, not *why* a customer switches or what specific behavior change it enables (lack of customer insight).</li>
+                    <li>**Diluted Focus:** Premature expansion to three use cases (Collections, Documents, Invoicing) before dominating one specific market niche.</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h3>3. Market</h3>
+                <ul class="analysis-list">
+                    <li>**TAM Validation:** $6-9B market by 2030 (12% CAGR) validates the opportunity, but AI commoditization compresses margins for basic features.</li>
+                    <li>**Target Risk:** The target segment (50-200 FTE) is price-sensitive and typically experiences 15-25% churn, which strains unit economics.</li>
+                    <li>**Bottom-Up TAM:** 6M companies $\times$ 10% addressable $\times$ 3% adoption $\times$ $600 MRR = \mathbf{\$108M}$ serviceable market. Competitive but winner-take-all dynamics are not present.</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h3>4. Competition & Differentiation</h3>
+                <ul class="analysis-list">
+                    <li>**Squeezed Middle:** Competition exists at the high-end (HighRadius, $475M raised) and low-end (Zapier, Power Automate). Sunbay is positioning in the weakest "middle."</li>
+                    <li>**AI Disadvantage:** AI-native startups (Gaviti, Growfin) have stronger technical teams and will likely ship better, more performant voice agents faster.</li>
+                    <li>**Differentiation Failure:** The "best of both worlds" (a "Toyota Corolla" strategy) is not a 10x differentiator. Software winners need extreme performance in one dimension.</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h3>5. Traction & Benchmarking</h3>
+                <ul class="analysis-list">
+                    <li>**Bottom Quartile:** $1.5k MRR at 6 months places in the bottom 25th percentile vs. typical pre-seed benchmarks ($5k YC median). Signals weak PMF.</li>
+                    <li>**Red Flag Pattern:** The March-April pattern (record count spike followed by a drop) is a severe red flag indicating a retention failure or a one-time GTM push that failed to convert.</li>
+                    <li>**Services Dependence:** $3k consulting is 67% of total revenue. This manual implementation work is not scalable and requires significant product development to mitigate.</li>
+                </ul>
+            </div>
+            
+            <div class="interactive-section">
+                <h3>📊 6. The Round & Returns Analysis</h3>
+                <div class="calculator">
+                    <div class="scenario-buttons">
+                        <button class="scenario-btn active" onclick="setScenario('realistic')">Base Case</button>
+                        <button class="scenario-btn" onclick="setScenario('optimistic')">Bull Case</button>
+                        <button class="scenario-btn" onclick="setScenario('pessimistic')">Bear Case</button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Investment: $<span id="investDisplay">200,000</span> | Ownership: <span id="ownershipDisplay">3.3%</span></label>
+                        <input type="range" id="investAmount" min="100000" max="400000" step="50000" value="200000">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Exit ARR: $<span id="arrDisplay">5</span>M | Multiple: <span id="multipleDisplay">8</span>x</label>
+                        <input type="range" id="exitARR" min="1" max="20" step="1" value="5">
+                        <input type="range" id="exitMultiple" min="4" max="12" step="0.5" value="8" style="margin-top: 6px;">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Years: <span id="yearsDisplay">6</span> | Dilution: <span id="dilutionDisplay">50%</span></label>
+                        <input type="range" id="exitYears" min="3" max="10" step="1" value="6">
+                        <input type="range" id="dilution" min="35" max="70" step="5" value="50" style="margin-top: 6px;">
+                    </div>
+                    
+                    <div class="results">
+                        <div class="result-card">
+                            <h4>Exit Value</h4>
+                            <div class="value" id="exitVal">$40M</div>
+                        </div>
+                        <div class="result-card">
+                            <h4>Return</h4>
+                            <div class="value" id="returnVal">$667K</div>
+                        </div>
+                        <div class="result-card">
+                            <h4>MOIC</h4>
+                            <div class="value" id="roiVal">3.3x</div>
+                        </div>
+                        <div class="result-card">
+                            <h4>IRR</h4>
+                            <div class="value" id="irrVal">22%</div>
+                        </div>
+                        <div class="result-card">
+                            <h4>Fund Impact</h4>
+                            <div class="value" id="fundVal">1.0%</div>
+                        </div>
+                        <div class="result-card">
+                            <h4>Grade</h4>
+                            <div class="value" id="verdict">⚠️</div>
+                        </div>
+                    </div>
+                    
+                    <div class="notes">
+                        <strong>Analysis:</strong> <span id="analysisNotes">Base returns (3.3x) are marginal for the risk profile. 278x growth is needed over 33 months at a perfect 20% MoM. Given weak traction, a bridge round is likely, increasing dilution risk and further suppressing returns.</span>
+                    </div>
+                    
+                    <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid #e5e7eb; font-size: 0.88em;">
+                        <strong>Key Insight:</strong> $6M post is 2x market ($3-4M typical). For a **5x MOIC return** on a $200k investment, the exit must be $\mathbf{\$60M}$ (or $\mathbf{\$7.5M\ ARR}$ at 8x). This requires a $\mathbf{417x}$ growth multiple from the current $18k ARR, an improbable path without flawless execution.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="final-decision">
+                <h3>Decision: Pass</h3>
+                <p><strong>Why pass:</strong> Returns are insufficient even in the base case (3.3x MOIC vs. 5-10x fund target). Valuation is 2x market rate ($333x ARR). Traction is bottom-quartile with significant churn signals. Team is incomplete (no full-time CTO), risking technical execution and product velocity.</p>
+                <p style="margin-top: 10px;"><strong>Reconsider if:</strong> The company achieves **$60k+ MRR** with sub-10% churn. CTO is full-time with a live, proven AI voice agent. Sustained 25%+ MoM growth for 4+ months. Proper pricing occurs at a $3-4M post-money valuation in a seed extension round.</p>
+            </div>
+            
+            <div class="sources">
+                <strong>Sources:</strong> Sunbay.io Deck (Oct 2025), Point Nine SaaS Benchmarks 2025, SaaS Capital Index, Aventis Advisors Valuations, Grand View Research, Mordor Intelligence<br>
+                S16VC Investment Team | October 20, 2025
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const postMoney = 6000000;
+        const fundSize = 70000000;
+        
+        function calculate() {
+            const invest = parseFloat(document.getElementById('investAmount').value);
+            const years = parseFloat(document.getElementById('exitYears').value);
+            const arr = parseFloat(document.getElementById('exitARR').value);
+            const multiple = parseFloat(document.getElementById('exitMultiple').value);
+            const dilution = parseFloat(document.getElementById('dilution').value) / 100;
+            
+            document.getElementById('investDisplay').textContent = invest.toLocaleString();
+            document.getElementById('yearsDisplay').textContent = years;
+            document.getElementById('arrDisplay').textContent = arr;
+            document.getElementById('multipleDisplay').textContent = multiple;
+            document.getElementById('dilutionDisplay').textContent = (dilution * 100) + '%';
+            
+            const ownership = invest / postMoney;
+            const finalOwnership = ownership * (1 - dilution);
+            const exitVal = arr * 1000000 * multiple;
+            const returnAmount = exitVal * finalOwnership;
+            const moic = returnAmount / invest;
+            const irr = (Math.pow(moic, 1/years) - 1) * 100;
+            const fundImpact = (returnAmount / fundSize) * 100;
+            
+            document.getElementById('ownershipDisplay').textContent = (ownership * 100).toFixed(1) + '%';
+            document.getElementById('exitVal').textContent = '$' + (exitVal / 1000000).toFixed(0) + 'M';
+            document.getElementById('returnVal').textContent = '$' + (returnAmount / 1000).toFixed(0) + 'K';
+            document.getElementById('roiVal').textContent = moic.toFixed(1) + 'x';
+            document.getElementById('irrVal').textContent = irr.toFixed(0) + '%';
+            document.getElementById('fundVal').textContent = fundImpact.toFixed(1) + '%';
+            
+            let verdict = '❌';
+            if (moic >= 7) verdict = '✅';
+            else if (moic >= 3) verdict = '⚠️';
+            document.getElementById('verdict').textContent = verdict;
+            
+            const currentARR = 1500 * 12; // $1.5k MRR * 12 = $18k ARR
+            const targetARR = arr * 1000000;
+            const growthRequired = (targetARR / currentARR).toFixed(0);
+            // Calculate months needed for growth at 20% MoM (a strong benchmark pace)
+            const monthsAt20 = Math.log(targetARR / currentARR) / Math.log(1.20);
+            
+            let notes = '';
+            if (moic < 3) {
+                notes = `Returns (${moic.toFixed(1)}x) are well below fund targets (need 5-10x). Requires ${growthRequired}x ARR growth. At 20% MoM needs ${monthsAt20.toFixed(0)} perfect months. Risk of capital loss is extremely high.`;
+            } else if (moic < 5) {
+                notes = `Base returns (${moic.toFixed(1)}x) are marginal for the risk profile. ${growthRequired}x growth is needed over ${monthsAt20.toFixed(0)} months at a perfect 20% MoM. A bridge round is likely, increasing dilution risk and further suppressing returns.`;
+            } else {
+                notes = `Returns meet minimums IF assumptions hold. Reaching $${arr}M ARR needs ${monthsAt20.toFixed(0)} months at 20% MoM (90th percentile pace). Must fix retention (March-April churn) and execute flawlessly on the AI voice agent.`;
+            }
+            document.getElementById('analysisNotes').textContent = notes;
+        }
+        
+        function setScenario(type) {
+            document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (type === 'realistic') {
+                document.getElementById('investAmount').value = 200000;
+                document.getElementById('exitARR').value = 5;
+                document.getElementById('exitMultiple').value = 8;
+                document.getElementById('exitYears').value = 6;
+                document.getElementById('dilution').value = 50;
+            } else if (type === 'optimistic') {
+                document.getElementById('investAmount').value = 200000;
+                document.getElementById('exitARR').value = 15;
+                document.getElementById('exitMultiple').value = 10;
+                document.getElementById('exitYears').value = 5;
+                document.getElementById('dilution').value = 45;
+            } else { // Pessimistic
+                document.getElementById('investAmount').value = 200000;
+                document.getElementById('exitARR').value = 2;
+                document.getElementById('exitMultiple').value = 6;
+                document.getElementById('exitYears').value = 7;
+                document.getElementById('dilution').value = 60;
+            }
+            calculate();
+        }
+        
+        document.getElementById('investAmount').addEventListener('input', calculate);
+        document.getElementById('exitYears').addEventListener('input', calculate);
+        document.getElementById('exitARR').addEventListener('input', calculate);
+        document.getElementById('exitMultiple').addEventListener('input', calculate);
+        document.getElementById('dilution').addEventListener('input', calculate);
+        
+        // Initial calculation on load
+        calculate();
+    </script>
+</body>
+</html>
